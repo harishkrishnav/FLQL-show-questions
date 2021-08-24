@@ -1,0 +1,31 @@
+{
+  "name": "FLQL display questions",
+  "description": "This is my first attempt at making a Google extension. It just about works.",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["activeTab", "scripting", "storage"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "/images/flql16.png",
+      "32": "/images/flql32.png",
+      "48": "/images/flql48.png",
+      "128": "/images/flql128.png"
+    }
+  }, 
+  "icons": {
+    "16": "/images/flql16.png",
+    "32": "/images/flql32.png",
+    "48": "/images/flql48.png",
+    "128": "/images/flql128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.wikiquiz.org/Quiz_Scorer_App*"],
+      "js": ["showQuestions.js"]
+    }
+  ] 
+}
