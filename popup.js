@@ -26,16 +26,18 @@ function displayFileLoaded() {
     chrome.storage.sync.get('questions', ({ questions }) => {
       console.log(questions);
       numberOfQuestions = questions.length;
+      if (numberOfQuestions > 0) {
         try {
-            const loaded = document.createElement("p");
-            loaded.className = "loaded";
-            loaded.innerText = "Loaded " + numberOfQuestions.toString() + " questions";
-            loaded.style.marginTop = "-10px";
-            element.append(loaded);
+          const loaded = document.createElement("p");
+          loaded.className = "loaded";
+          loaded.innerText = "Loaded questions";
+          loaded.style.marginTop = "-10px";
+          element.append(loaded);
         }
         catch(e) {
-          ;
-        }   
+        ;
+        }
+      }   
     });
   }
 }
