@@ -83,11 +83,12 @@ async function showQuestion() {
         if (prevRound === round && prevQuestion === question) {
           //console.log("Same question");
           bottomBar.append(questionText);
+          prevQuestionText = foundQuestion.questionText;
         } else {
           //console.log("Show button");
 
           const prevQuestionElement = getPreviousQuestionElement(prevQuestionText);
-          const newButton = getButtonElement(questionText, prevQuestionElement);
+          const newButton = getButtonElement(questionText, prevQuestionElement, foundQuestion);
           bottomBar.append(newButton);
           bottomBar.append(prevQuestionElement);
           questionText.style.visibility = "hidden";
@@ -95,7 +96,6 @@ async function showQuestion() {
 
           prevRound = round;
           prevQuestion = question;
-          prevQuestionText = foundQuestion.questionText;
         }
       }
     } catch (e) {}
@@ -120,7 +120,7 @@ function getQuestionElement(foundQuestion) {
   return questionText;
 }
 
-function getButtonElement(questionText, prevQuestionElement) {
+function getButtonElement(questionText, prevQuestionElement, foundQuestion) {
   const newButton = document.createElement("button");
   newButton.className = "show-question-button";
   newButton.innerText = "Show current question";
@@ -134,6 +134,7 @@ function getButtonElement(questionText, prevQuestionElement) {
     questionText.style.display = "block";
     questionText.style.visibility = "visible";
     prevQuestionElement.style.display = "none";
+    prevQuestionText = foundQuestion.questionText;
   };
   return newButton;
 }
