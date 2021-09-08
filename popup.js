@@ -1,18 +1,17 @@
 let loadButton = document.getElementById("loadButton");
 
 loadButton.addEventListener("click", async () => {
-  console.log("loading file");
   var fileToLoad = document.getElementById("fileToLoad").files[0];
   var fileReader = new FileReader();
-  fileReader.onload = async function(fileLoadedEvent){
-      var textFromFileLoaded = fileToArray(fileLoadedEvent.target.result);
-      chrome.storage.local.set({ 'questions' : textFromFileLoaded });
-      console.log(textFromFileLoaded);
-      let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        function: displayFileLoaded,
-      });
+  fileReader.onload = async function (fileLoadedEvent) {
+    var textFromFileLoaded = fileToArray(fileLoadedEvent.target.result);
+    chrome.storage.local.set({ questions: textFromFileLoaded });
+    console.log(textFromFileLoaded);
+    let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      function: displayFileLoaded,
+    });
   };
 
   fileReader.readAsText(fileToLoad, "UTF-8");
@@ -21,10 +20,8 @@ loadButton.addEventListener("click", async () => {
 function displayFileLoaded() {
   var element = document.getElementById("instructions");
   if (element) {
-    console.log("Found instruction");
     var numberOfQuestions = 0;
-    chrome.storage.sync.get('questions', ({ questions }) => {
-      console.log(questions);
+    chrome.storage.sync.get("questions", ({ questions }) => {
       numberOfQuestions = questions.length;
       if (numberOfQuestions > 0) {
         try {
@@ -33,17 +30,14 @@ function displayFileLoaded() {
           loaded.innerText = "Loaded questions";
           loaded.style.marginTop = "-10px";
           element.append(loaded);
-        }
-        catch(e) {
-        ;
-        }
-      }   
+        } catch (e) {}
+      }
     });
   }
 }
 
+//copied from StackOverflow - modify based on actual FLQL format
 function fileToArray(str, delimiter = "\t") {
-
   // slice from start of text to the first \n index
   // use split to create an array from string by delimiter
   const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
