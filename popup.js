@@ -7,6 +7,7 @@ loadButton.addEventListener("click", async () => {
   fileReader.onload = async function (fileLoadedEvent) {
     var textFromFileLoaded = fileToArray(fileLoadedEvent.target.result);
     chrome.storage.local.set({ questions: textFromFileLoaded });
+    chrome.storage.local.set({ fileName });
     //console.log(textFromFileLoaded);
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     chrome.scripting.executeScript({
