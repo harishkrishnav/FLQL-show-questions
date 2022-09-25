@@ -19,21 +19,26 @@ var converter = new showdown.Converter();
 async function showInstructions() {
   var elements = document.getElementsByTagName("div");
   var noteText = "Upload the questions before you hit start";
-  chrome.storage.local.get("questions", ({questions}) => {
-    if (questions && questions.length>2) {
-      noteText = "There is already a loaded set of questions in the browser cache. Re-upload if you want to be sure, and click start."
-    } 
-    for (item of elements) {
-      try {
-        if (item.className === "cell w99 h10") {
-          item.id = "42";
-          const instructionsElement = getInstructionsElement(noteText);
-          item.append(instructionsElement);
-        }
-      } catch (e) {}
+  const {questions} = await chrome.storage.local.get("questions");
+  if (questions && questions.length > 2) {
+    const {fileName} = await chrome.storage.local.get("fileName");
+    noteText = "There is already a loaded set of questions in the browser cache. ";
+    if (fileName !== "") {
+      noteText += `Question set name: "${fileName}". `;
     }
-  });
+    noteText += "Re-upload if you want to be sure, and click start.";
+  }
+  for (item of elements) {
+    try {
+      if (item.className === "cell w99 h10") {
+        item.id = "42";
+        const instructionsElement = getInstructionsElement(noteText);
+        item.append(instructionsElement);
+      }
+    } catch (e) {}
+  }
 }
+
 
 /* ----------------------------------------- */
 //showQuestion must be called each time a button is clicked
